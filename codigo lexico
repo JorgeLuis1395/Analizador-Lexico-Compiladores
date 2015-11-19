@@ -1,0 +1,21 @@
+package analizadorlexico;
+import static analizadorlexico.Tokens.*;
+%%
+%class Lexico
+%type Tokens
+palabras = [a-z A-Z_]
+numeros = [0-9]
+espacios=[ \t\r\n]
+palabras_reservadas=[]"if"|"else"|"then"|"for"|"while"|"return"]
+
+%{
+public String lexema;
+%}
+%%
+{espacios} {/*Ignore*/}
+"=" {return Operador_de_asignacion;}
+["+"|"-"|"*"|"/" ] {return Operador;}
+{palabras}* {lexema=yytext(); return Identificador;}
+ ("(-"{numeros}+")")|{numeros}+ {lexema=yytext(); return Numero;}
+{palabras_reservadas}* {lexema=yytext(); return Palabra_Reservada;}
+. {return Error;}
