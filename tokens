@@ -1,0 +1,15 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package analizadorlexico;
+
+/**
+ *
+ * @author USER
+ */
+public enum Tokens {
+    Identificador,Numero,Operador_de_asignacion,Operador,Palabra_Reservada,Error
+    
+}
