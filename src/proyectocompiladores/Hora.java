@@ -1,3 +1,4 @@
+
 package proyectocompiladores;
 
 import java.text.SimpleDateFormat;
@@ -30,3 +31,13 @@ public class Hora extends Thread {
         }
     
     }
+    
+    
+    
+
+    
+
+    
+    
+    
+}
