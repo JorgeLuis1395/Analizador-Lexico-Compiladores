@@ -10,5 +10,5 @@ package proyectocompiladores;
  * @author USER
  */
 public enum Token {
-    Identificador, LiteralInt, CaracterEspecial, OperadorCompuesto, PalabrasReservadas,LiteralFloat, Error, LiteralBool, LiteralChar,LiteralString, Linea, columna 
+    Identificador, LiteralInt, CaracterEspecial, OperadorCompuesto, PalabrasReservadas,LiteralFloat, Error,Erro, LiteralBool, LiteralChar,LiteralString, Linea, columna 
 }

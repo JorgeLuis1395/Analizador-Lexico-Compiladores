@@ -5,7 +5,11 @@
  */
 package proyectocompiladores;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -16,10 +20,11 @@ public class PROYECTOcOMPILADORES {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        
         // TODO code application logic here
         interfaz ventana = new interfaz();
-       ventana.setVisible(true);
+        ventana.setVisible(true);
         String path = "C:/Users/USER/Documents/NetBeansProjects/PROYECTOcOMPILADORES/src/proyectocompiladores/Lexico.flex";
         generarLexico(path);
 

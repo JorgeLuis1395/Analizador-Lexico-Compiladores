@@ -96,7 +96,7 @@ public class interfaz extends javax.swing.JFrame {
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addGap(171, 171, 171)
+                                .addGap(148, 148, 148)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(79, 79, 79))
@@ -184,10 +184,11 @@ public class interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
+    try {
             archivos ar = new archivos();
             ar.probarLexico(jTextArea1);// TODO add your handling code here:
-        } catch (IOException ex) {
+            
+            } catch (IOException ex) {
             Logger.getLogger(interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

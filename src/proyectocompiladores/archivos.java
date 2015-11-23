@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOError;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -28,8 +30,8 @@ int contador=0;
     public String texto;
     boolean existe;
     String direccion;
-
-    
+BufferedWriter salida1;
+    File salida= new File("resultados.csv");
     public void abrir(){
     
     aux = "";
@@ -51,7 +53,7 @@ int contador=0;
 			}
                         }
                         else{
-                            JOptionPane.showMessageDialog(null, "ERROR", "Solo se acepta formato prac1lfp", 0);
+                            JOptionPane.showMessageDialog(null, "ERROR","", 0);
                         }
                         
                          if(status== JFileChooser.CANCEL_OPTION){
@@ -88,11 +90,57 @@ int contador=0;
 		}
 	} 
             
-        public void probarLexico(JTextArea area) throws IOException{
+//        public void probarLexico(JTextArea area) throws IOException{//ahio dejame ver k sale //sicogia loco ahora se volvio loco perame
+//        int contIDs=0;
+//        int linea=0;
+//        
+//        int columna=0;
+//        
+//        File fichero = new File ("fichero.txt");
+//        File salida= new File("resultados.csv");
+//        PrintWriter writer;
+//        try {
+//            writer = new PrintWriter(fichero);
+//            writer.print(area.getText());
+//            writer.close();
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(interfaz.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        BufferedWriter salida1;
+//        salida1=new BufferedWriter(new FileWriter("resultados.csv"));
+//        Reader reader = new BufferedReader(new FileReader("fichero.txt"));
+//        Lexico lexer = new Lexico (reader);
+//        String resultado="";
+//        Token token = lexer.yylex();
+//       while(true)
+//           {
+//               if(token==null){
+//               System.out.println("eof");;
+//                return;
+//            }
+//           
+//            switch(token){
+//                    case Identificador: case LiteralInt: case OperadorCompuesto : case PalabrasReservadas: case CaracterEspecial: case LiteralFloat : case LiteralBool : case LiteralChar : case LiteralString:
+//                    System.out.println("TOKEN: "+token+" "+lexer.lexema + "linea: "+linea++);
+//                    break;
+//                case Error:
+//                    System.out.println("TOKEN: "+token+" "+lexer.lexema+"hola");
+//                default:
+//                    System.out.println("TOKEN: "+token);
+//            }
+//            System.out.println(resultado);
+//           //salida1.write(resultado); 
+//            } 
+//       
+//        // salida1.close(); 
+//       
+//}
+    public void probarLexico(JTextArea area) throws IOException{
         int contIDs=0;
         int linea=0;
         int columna=0;
         File fichero = new File ("fichero.txt");
+         
         PrintWriter writer;
         try {
             writer = new PrintWriter(fichero);
@@ -102,28 +150,31 @@ int contador=0;
             Logger.getLogger(interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
         Reader reader = new BufferedReader(new FileReader("fichero.txt"));
+        
+        salida1=new BufferedWriter(new FileWriter("resultados.csv"));
         Lexico lexer = new Lexico (reader);
         String resultado="";
-        while(true){
+        int i=0;
+        while(linea<6){//ahi si corre y funciona en vez de escribir resultado ponle diractemaente writer
             Token token = lexer.yylex();
             if(token==null){
-                System.out.println("EOF");
+                System.out.println("EnOF");
                 return;
             }
             switch(token){
                 case Identificador: case LiteralInt: case OperadorCompuesto : case PalabrasReservadas: case CaracterEspecial: case LiteralFloat : case LiteralBool : case LiteralChar : case LiteralString:
-                    System.out.println("TOKEN: "+token+" "+lexer.lexema + "linea: "+linea++);
+                   salida1.write("TOiKEN: "+token+" "+lexer.lexema + "linea: "+linea++);//prame un5
+                   System.out.println("TOKEN: "+token+" "+lexer.lexema + "linea: "+linea++);
                 break;
                 case Error:
                     System.out.println("TOKEN: "+token+" "+lexer.lexema);
+                    salida1.write("TOKEN: "+token+" "+lexer.lexema);
                 default:
-                    System.out.println("TOKEN: "+token);
-            }
+                    salida1.write("TOKEN: "+token);
+            }//ahora donde cierro el archivoro  ya salio mijin ajjajaja 
         }
- }
-        
-        
-                    
-
-
+    //no loco solo coge el primeroo el problema es como le podems en vez de i otra forma  cuantas 
+        salida1.close();
+    }
 }
+
