@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import proyectocompiladores.archivos;
+import proyectocompiladores.archivos;
 
 /**
  *
@@ -22,11 +23,9 @@ public class interfaz extends javax.swing.JFrame {
     /**
      * Creates new form interfaz
      */
-    Hora h;
+   
     public interfaz() {
         initComponents();
-         h =new Hora(this.jHora);
-       h.start();
     }
 
     /**

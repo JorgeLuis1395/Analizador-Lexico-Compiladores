@@ -1,2 +1,11 @@
-sd
-asd 5
+int = 5
+#include
+//estoesuncomentraio
+/*hola*/
+6.8
+if(x=u)
+4.56
+-67.5
+end
+x>6
+Hola

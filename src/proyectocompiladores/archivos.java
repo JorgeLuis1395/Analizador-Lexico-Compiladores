@@ -17,6 +17,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import proyectocompiladores.Lexico;
+import proyectocompiladores.Token;
+import proyectocompiladores.interfaz;
 
 /**
  *
@@ -105,34 +108,7 @@ BufferedWriter salida1;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Reader reader = new BufferedReader(new FileReader("fichero.txt"));
         
-        salida1=new BufferedWriter(new FileWriter("resultados.csv"));
-        Lexico lexer = new Lexico (reader);
-        String resultado="";
-        int i=0;
-        while(true){
-            Token token = lexer.yylex();
-            if(token==null){
-                System.out.println("EnOF");
-                break;
-            }
-                         
-            switch(token){
-                case Identificador: case LiteralInt: case OperadorCompuesto : case PalabrasReservadas: case CaracterEspecial: case LiteralFloat : case LiteralBool : case LiteralChar : case LiteralString:
-                   salida1.write("TOKEN: "+token+"      "+lexer.lexema +"      "+"linea: "+i+"\n");
-                   System.out.println("TOKEN: "+token+"     "+lexer.lexema +"      "+ "linea: "+i+"\n");
-                break;
-                case Error:
-                    System.out.println("TOKEN: "+token+"    "+lexer.lexema+"\n"+ "linea"+i);
-                   salida1.write("TOKEN: "+token+"   "+lexer.lexema+"linea"+i+"\n");
-                default:
-                   salida1.write("TOKEN: "+token+"linea"+i+"\n");
-            i++;
-            } 
-            i++;
-        }
-        salida1.close();
     }
     
 }
