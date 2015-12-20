@@ -1,141 +1,113 @@
 package proyectocompiladores;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
-class Token {
-        Token (int numToken, String token, String tipo, int linea){
-        this.numToken = numToken;	
-        this.token = new String(token);
-        this.tipo = tipo;
-        this.linea = linea;
-       
-    }
- public int numToken;
-    public String token;
-    public String tipo;
-    public int linea;
-
-    public String toString() {
-    
-		return token+" : "+tipo+ " linea :    "+(linea+1) +",";	
-    }
-}
+import java_cup.runtime.*;
+import java.io.Reader;
+      
 %%
-%function nextToken
-%public
 %class Lexico
-%unicode
-%{
-	
-    private int contador;
-    private ArrayList<Token> tokens;
-
-	private void Salida() throws IOException{
-			String filename = "salida.csv";
-			BufferedWriter out = new BufferedWriter(
-				new FileWriter(filename));
-            System.out.println("\n EXITOSAMENTE GENERADO\n");
-			for(Token lexico: this.tokens){
-			out.write(lexico + "\n");
-			}
-			out.close();
-	}
-%}
-%init{
-    contador = 0;
-	tokens = new ArrayList<Token>();
-%init}
-
-%eof{
-	try{
-		this.Salida();
-        System.exit(0);
-	}catch(IOException ioe){
-		ioe.printStackTrace();
-	}
-%eof}
 %line
-
-numeros=[0-9]
-espacio=" "
-salto=\n|\r|\r\n
-CH= "'"[a-z|A-Z][a-z|A-Z|0-9] "'"
-CADENA= """ [a-z|A-Z][a-z|A-Z|0-9]* """
-
+%column
+%cup
+   
 %{
-public String lexema;
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline, yycolumn);
+    }
+    
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
+    }
 %}
-%%
-{espacio} {}
-("//"([a-z|A-Z][a-z|A-Z|0-9]* )*) {}
-"/*" [a-z|A-Z][a-z|A-Z|0-9]*|[a-z|A-Z|0-9]* "*/" {}
-"int"|"float"|"bool"|"char"|"string"|"if"|"then"|"else"|"while"|"do"|"input"|"output"|"return" {
-contador++;
-Token lexico = new Token(contador,yytext(),"PalabraReservada",yyline);
-tokens.add(lexico);
-return lexico;
+caracter=[A-Za-z]
+numero=[0-9] 
+expre={caracter}|{numero}
+IDENT={caracter}({expre})*
+
+Salto = \r|\n|\r\n
+Espacio     = {Salto} | [ \t\f]
+Entero = 0 | [1-9][0-9]*
+%% 
+   
+
+   
+<YYINITIAL> {
+"+" { System.out.print(" + ");
+                          return symbol(sym.SUMA); }
+"-" { System.out.print(" - ");
+                          return symbol(sym.RESTA); }
+"*" { System.out.print(" * ");
+                          return symbol(sym.MULT); }
+"/" { System.out.print(" / ");
+                          return symbol(sym.DIV); }
+":" { System.out.print(" : ");
+                          return symbol(sym.DOSP); }
+";" { System.out.print(" ; ");
+                          return symbol(sym.TER); }
+"(" { System.out.print(" ( ");
+                          return symbol(sym.PARENTESISABIERTO); }
+"{" { System.out.print(" { ");
+                          return symbol(sym.LLAVEABIERTA); }
+")" {
+System.out.print(" ) ");
+                          return symbol(sym.PARENTESISCERRADO); }
+"}" { System.out.print(" } ");
+                          return symbol(sym.LLAVECERRADA); }
+"=" { System.out.print(" = ");
+                          return symbol(sym.EQUAL); }
+"<" { System.out.print(" < ");
+                          return symbol(sym.MENOR); }
+">" { System.out.print(" > ");
+                          return symbol(sym.MAYOR); }
+"++" { System.out.print(" ++ ");
+                          return symbol(sym.INCREMENTO); }					  						  
+"[" { System.out.print(" [ ");
+                          return symbol(sym.CORCHIZQ); }
+"]" { System.out.print(" ] ");
+                          return symbol(sym.CORCHDER); }
+					  						  
+"int" { System.out.print(" int ");
+                      return symbol(sym.INT);}
+"for" { System.out.print(" for") ; 
+                      return symbol(sym.FOR);}
+"float" { System.out.print(yytext()); 
+                      return symbol(sym.FLOA, new Integer(yytext()));}
+"bool" { System.out.print("bool"); 
+                      return symbol(sym.BOOL);}
+"char" { System.out.print("char"); 
+                      return symbol(sym.CHA);}
+"String" { System.out.print("String"); 
+                      return symbol(sym.string);}
+"if" { System.out.print("if"); 
+                      return symbol(sym.IF);}
+"then" { System.out.print("then"); 
+                      return symbol(sym.THEN);}
+"else" { System.out.print("else"); 
+                      return symbol(sym.ELSE);}
+"while" { System.out.print("while"); 
+                      return symbol(sym.WHILE);}
+"do" {System.out.print("do"); 
+                      return symbol(sym.DO);}
+"input" {System.out.print("input"); 
+                      return symbol(sym.INPUT);}
+"output" {System.out.print("output"); 
+                      return symbol(sym.OUTPUT);}
+"return" {System.out.print("return"); 
+                      return symbol(sym.RET);}
+"true"|"false" {System.out.print(yytext()); 
+                      return symbol(sym.BOOLEANO);}					  
+'([a-z|A-Z][a-z|A-Z|0-9]*)' {System.out.print(yytext()); 
+return symbol(sym.CHAR, new String (yytext()));}
+
+"""([a-z|A-Z][a-z|A-Z|0-9]*)""" {System.out.print(yytext()); 
+                      return symbol(sym.STRING, new String(yytext()));
 }
-"true"|"false" {
-contador++;
-Token lexico = new Token(contador,yytext(),"Booleano",yyline);
-tokens.add(lexico);
-return lexico;
+[a-z][a-z|A-Z|0-9]* {System.out.print(yytext()); 
+return symbol(sym.IDENTIFICADOR, new String(yytext()));}
+[+-]?{numero}*[.]{numero}+ {System.out.print(yytext()); 
+return symbol(sym.FLOTANTE, new Integer(yytext()));}
+[+-]? {numero}+ { System.out.print(yytext()); 
+                      return symbol(sym.INTEGER, new Integer(yytext())); }   
+{Espacio}       { /* ignora el espacio */ } 
+	
 }
 
-'([a-z|A-Z][a-z|A-Z|0-9]*)' {
-contador++;
-Token lexico = new Token(contador,yytext(),"Char",yyline);
-tokens.add(lexico);
-return lexico;
-}
-
-"""([a-z|A-Z][a-z|A-Z|0-9]*)""" {
-contador++;
-Token lexico = new Token(contador,yytext(),"String",yyline);
-tokens.add(lexico);
-return lexico;
-}
-[a-z][a-z|A-Z|0-9]* {
-contador++;
-Token lexico = new Token(contador,yytext(),"Identificador",yyline);
-tokens.add(lexico);
-return lexico;
-}
-[+-]? {numeros}+ {
-contador++;
-Token lexico = new Token(contador,yytext(),"Integer",yyline);
-tokens.add(lexico);
-return lexico;
-}
-{numeros}*[.]{numeros}+ {
-contador++;
-Token lexico = new Token(contador,yytext(),"Flotante",yyline);
-tokens.add(lexico);
-return lexico;
-}
-","|";"|":"|"("|")"|"["|"]"|"{"|"}"|"+"|"-"|"*"|"/"|"<"|">"|"="|"!"|"&"|"$" {
-contador++;
-Token lexico = new Token(contador,yytext(),"CaracterEspecial",yyline);
-tokens.add(lexico);
-return lexico;
-}
-"<="|">="|"=="|"!="|"&&"|"||" {
-contador++;
-Token lexico = new Token(contador,yytext(),"OperadorCompuesto",yyline);
-tokens.add(lexico);
-return lexico;
-}
-[A-Z][a-z|A-Z|0-9]* {contador++;
-Token lexico = new Token(contador,yytext(),"ERROR",yyline);
-tokens.add(lexico);
-return lexico;
-}
-{salto} {}
-(.|\n) { 
-contador++;
-   Token lexico = new Token(contador,yytext(),"error_lexico",yyline);
-    tokens.add(lexico);
-   return lexico;
- }
+[^]                    { throw new Error("Caracter ilegal <"+yytext()+">"); }
