@@ -49,21 +49,22 @@ parser code {:
 :};
    
 
-terminal           TER, DOSP, SUMA,RESTA,MULT, DIV, PARENTESISABIERTO, LLAVEABIERTA,LLAVECERRADA,PARENTESISCERRADO,EQUAL,MENOR,MAYOR,INCREMENTO,CORCHIZQ,CORCHDER,INT,FOR,FLOA,BOOL, INICIO, FIN , CHA ,string,IF,THEN,ELSE,WHILE,DO,INPUT,OUTPUT,RET;
+terminal           COMA,TER, DOSP, SUMA,RESTA,MULT, DIV, PARENTESISABIERTO, LLAVEABIERTA,LLAVECERRADA,PARENTESISCERRADO,EQUAL,MENOR,MAYOR,INCREMENTO,CORCHIZQ,CORCHDER,INT,FOR,FLOA,BOOL, INICIO, FIN , CHA ,string,IF,THEN,PELSE,WHILE,DO,INPUT,OUTPUT,RET;
 terminal          Integer   INTEGER,FLOTANTE;
 terminal Object IDENTIFICADOR,BOOLEANO,CHAR,STRING;
 
 
 non terminal  Object  programa, sent, sentencia,variablesGlobales, CuerpoPrograma, variableGlobal,tipoVarLocal, usovariables;
 non terminal Object   salida,entrada,controlflujo,declaracionVariablesGlobales, conjuntoFunciones, variableGlobal1, tipovariable, vGlobalVector,vGlobalchart,vGlobalString,vGlobalVectorCHA,vGlobalVectorSTR, listater, comandosimple,atribucion,atribucionsimple,atribucionsimplevec,atribucionveccha,atribucionvecstr,palabraelse;
-non terminal Object  comandosimplevec,comandosimpleveccha,comandosimplevecstr,bloque,bloquecomandos,bloquecomandossin,palabraif,palabrawhile,palabrado,expresion,comandovacio,llamadafuncion;
+non terminal Object   comandosimple2,funval,recur,VAL, ASIG,expresionesaritmeticas,expresioninteger,operador,atribucionsimple1,sinelse,conelse,comandosimplevec,comandosimpleveccha,comandosimplevecstr,bloque,bloquecomandos,bloquecomandossin,palabraif,palabrawhile,palabrado,expresion,comandovacio,llamadafuncion;
 
 
    //GRAMATICA
 start with programa;
 
-programa ::= declaracionVariablesGlobales bloque 
-			|bloque          
+programa ::= declaracionVariablesGlobales conjuntoFunciones  bloque
+			|conjuntoFunciones bloque
+			|bloque
 ;
 
 //variables globales
@@ -85,7 +86,7 @@ vGlobalVector ::=  tipovariable DOSP IDENTIFICADOR CORCHIZQ INTEGER CORCHDER EQU
 
 ;
 vGlobalVectorCHA ::=  CHA DOSP IDENTIFICADOR CORCHIZQ INTEGER CORCHDER EQUAL IDENTIFICADOR TER;
-vGlobalVectorSTR ::=  string DOSP IDENTIFICADOR CORCHIZQ INTEGER CORCHDER EQUAL IDENTIFICADOR TER;
+vGlobalVectorSTR ::=  string DOSP IDENTIFICADOR CORCHIZQ INTEGER CORCHDER TER;
 vGlobalString ::= string DOSP IDENTIFICADOR EQUAL STRING TER;
 vGlobalchart ::= CHA DOSP IDENTIFICADOR EQUAL CHAR TER;
 variableGlobal1 ::= tipovariable DOSP IDENTIFICADOR TER ;
@@ -95,63 +96,65 @@ tipovariable ::= INT
 				;
 				
 bloque ::= bloquecomandos
-		  |bloquecomandossin
+		   |bloquecomandossin
 			;
-bloquecomandos ::= LLAVEABIERTA comandosimple TER LLAVECERRADA
+			
+bloquecomandos ::= LLAVEABIERTA comandosimple  TER comandosimple  TER comandosimple  TER LLAVECERRADA 
 				;
 bloquecomandossin ::= LLAVEABIERTA   LLAVECERRADA;		
 
-/*
-conjuntoFunciones ::= tipovariable DOSP listater;
-listater ::= listater parametro ;
-*/                  
 
+conjuntoFunciones ::= tipovariable DOSP listater;
+listater ::= IDENTIFICADOR PARENTESISABIERTO recur PARENTESISCERRADO ;
+recur ::= funval COMA funval
+		|funval;                
+funval ::= tipovariable DOSP IDENTIFICADOR;
 //comandosimple
 comandosimple ::=  atribucion
-					
-					| controlflujo
-					
-					| entrada
-					
-					| salida
-					
-					| bloque
-					
-					| llamadafuncion
+					| controlflujo 
+					| entrada 
+					| salida 
+					|bloque
+					| llamadafuncion 
+					|expresionesaritmeticas
 					
 					;
 	//atribucion		
-atribucion ::= atribucionsimple
-			
-			|atribucionsimplevec
-			
-			| atribucionveccha
-			
-			| atribucionvecstr
+atribucion ::= atribucion atribucionsimple 
+				|atribucionsimple
+				|atribucion atribucionsimple1
+				|atribucionsimple1
 			;
 			 			
 atribucionsimple ::= IDENTIFICADOR EQUAL INTEGER;
-atribucionsimplevec ::= vGlobalVector EQUAL INTEGER;
-atribucionveccha ::=vGlobalVectorCHA EQUAL CHAR;
-atribucionvecstr ::=vGlobalVectorSTR EQUAL STRING;
+atribucionsimple1  ::= IDENTIFICADOR INCREMENTO;
 controlflujo ::= palabraif
 				|palabraelse
-				| palabrawhile
+				|palabrawhile
 				|palabrado
 				;
-palabraif ::= IF PARENTESISABIERTO expresion PARENTESISCERRADO THEN comandosimple;
-//palabraelse ::= palabraif ELSE comandosimple;
-palabrawhile ::= WHILE PARENTESISABIERTO expresion PARENTESISCERRADO DO comandosimple;
-palabrado ::= DO comandosimple WHILE PARENTESISABIERTO expresion PARENTESISCERRADO;
+palabraif ::=  sinelse
+				;
+sinelse ::=IF PARENTESISABIERTO expresion PARENTESISCERRADO LLAVEABIERTA THEN comandosimple TER LLAVECERRADA ;
+palabraelse ::= PELSE LLAVEABIERTA comandosimple  LLAVECERRADA;
+palabrawhile ::= WHILE PARENTESISABIERTO expresion PARENTESISCERRADO DO comandosimple ;
+palabrado ::= DO comandosimple  WHILE PARENTESISABIERTO expresion PARENTESISCERRADO;
 expresion ::= IDENTIFICADOR EQUAL INTEGER;
 
-//comandovacio
-
 //llamadafuncion
-llamadafuncion ::= IDENTIFICADOR PARENTESISABIERTO PARENTESISCERRADO TER;				
+llamadafuncion ::= IDENTIFICADOR PARENTESISABIERTO PARENTESISCERRADO ;				
 // ENTRADA
-entrada ::= IDENTIFICADOR PARENTESISABIERTO IDENTIFICADOR PARENTESISCERRADO TER;
+entrada ::= IDENTIFICADOR PARENTESISABIERTO IDENTIFICADOR PARENTESISCERRADO;
 
 //expresionesaritmeticas
-expresionesaritmeticas ::= SUMA
-;
+expresionesaritmeticas ::= IDENTIFICADOR EQUAL VAL operador VAL ;
+ASIG ::= MAYOR
+		|MENOR;
+operador ::= SUMA	
+			|RESTA
+			|MULT
+			|DIV;
+VAL ::= IDENTIFICADOR
+		|INTEGER
+		|FLOTANTE;
+

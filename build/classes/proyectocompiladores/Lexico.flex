@@ -40,16 +40,17 @@ Entero = 0 | [1-9][0-9]*
                           return symbol(sym.DIV); }
 ":" { System.out.print(" : ");
                           return symbol(sym.DOSP); }
-";" { System.out.print(" ; ");
-                          return symbol(sym.TER); }
+";" { System.out.print(" ; " + "\n");
+                          return symbol(sym.TER);}
+"," { System.out.print(" , ");
+                          return symbol(sym.COMA); }
 "(" { System.out.print(" ( ");
                           return symbol(sym.PARENTESISABIERTO); }
-"{" { System.out.print(" { ");
+"{" { System.out.print(" { " + "\n");
                           return symbol(sym.LLAVEABIERTA); }
-")" {
-System.out.print(" ) ");
+")" {System.out.print(" ) " + "\n");
                           return symbol(sym.PARENTESISCERRADO); }
-"}" { System.out.print(" } ");
+"}" { System.out.print(" } " + "\n");
                           return symbol(sym.LLAVECERRADA); }
 "=" { System.out.print(" = ");
                           return symbol(sym.EQUAL); }
@@ -78,12 +79,10 @@ System.out.print(" ) ");
                       return symbol(sym.string);}
 "if" { System.out.print("if"); 
                       return symbol(sym.IF);}
-"then" { System.out.print("then"); 
+"then" { System.out.print("then  "); 
                       return symbol(sym.THEN);}
 "else" { System.out.print("else"); 
-                      return symbol(sym.ELSE);}
-"while" { System.out.print("while"); 
-                      return symbol(sym.WHILE);}
+                      return symbol(sym.PELSE);}
 "do" {System.out.print("do"); 
                       return symbol(sym.DO);}
 "input" {System.out.print("input"); 

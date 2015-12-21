@@ -1,2 +1,8 @@
-int: x ; 
-{ x=9;}
+int:funcion(int: y,int: c)
+{
+if(x=8)
+{
+then x=y+z;
+};
+y=9;
+}
