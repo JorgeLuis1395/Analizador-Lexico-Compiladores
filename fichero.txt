@@ -1,8 +1,10 @@
+int: x;
 int:funcion(int: y,int: c)
 {
 if(x=8)
 {
 then x=y+z;
 };
-y=9;
+x=y+z;
+algo=4;
 }

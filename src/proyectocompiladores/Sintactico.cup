@@ -41,7 +41,7 @@ parser code {:
             Sintactico asin = new Sintactico(
                     new Lexico( new FileReader(args[0])));
             Object result = asin.parse().value;
-            System.out.println("\n*** Resultados finales ***");
+            System.out.println("sin errores");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -49,7 +49,7 @@ parser code {:
 :};
    
 
-terminal           COMA,TER, DOSP, SUMA,RESTA,MULT, DIV, PARENTESISABIERTO, LLAVEABIERTA,LLAVECERRADA,PARENTESISCERRADO,EQUAL,MENOR,MAYOR,INCREMENTO,CORCHIZQ,CORCHDER,INT,FOR,FLOA,BOOL, INICIO, FIN , CHA ,string,IF,THEN,PELSE,WHILE,DO,INPUT,OUTPUT,RET;
+terminal           COMA,TER, DOSP, SUMA,RESTA,MULT, DIV, PARENTESISABIERTO, LLAVEABIERTA,LLAVECERRADA,PARENTESISCERRADO,EQUAL,MENOR,MAYOR,INCREMENTO,CORCHIZQ,CORCHDER,INT,FLOA,BOOL, INICIO, FIN , CHA ,string,IF,THEN,PELSE,WHILE,DO,INPUT,OUTPUT,RET;
 terminal          Integer   INTEGER,FLOTANTE;
 terminal Object IDENTIFICADOR,BOOLEANO,CHAR,STRING;
 
@@ -125,7 +125,7 @@ atribucion ::= atribucion atribucionsimple
 				|atribucion atribucionsimple1
 				|atribucionsimple1
 			;
-			 			
+expresion ::= IDENTIFICADOR EQUAL INTEGER;			 			
 atribucionsimple ::= IDENTIFICADOR EQUAL INTEGER;
 atribucionsimple1  ::= IDENTIFICADOR INCREMENTO;
 controlflujo ::= palabraif
@@ -137,9 +137,9 @@ palabraif ::=  sinelse
 				;
 sinelse ::=IF PARENTESISABIERTO expresion PARENTESISCERRADO LLAVEABIERTA THEN comandosimple TER LLAVECERRADA ;
 palabraelse ::= PELSE LLAVEABIERTA comandosimple  LLAVECERRADA;
-palabrawhile ::= WHILE PARENTESISABIERTO expresion PARENTESISCERRADO DO comandosimple ;
-palabrado ::= DO comandosimple  WHILE PARENTESISABIERTO expresion PARENTESISCERRADO;
-expresion ::= IDENTIFICADOR EQUAL INTEGER;
+palabrawhile ::=WHILE PARENTESISABIERTO expresion PARENTESISCERRADO DO comandosimple  ;
+palabrado ::=DO comandosimple  WHILE PARENTESISABIERTO expresion PARENTESISCERRADO;
+
 
 //llamadafuncion
 llamadafuncion ::= IDENTIFICADOR PARENTESISABIERTO PARENTESISCERRADO ;				

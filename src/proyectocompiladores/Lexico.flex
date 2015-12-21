@@ -67,8 +67,8 @@ Entero = 0 | [1-9][0-9]*
 					  						  
 "int" { System.out.print(" int ");
                       return symbol(sym.INT);}
-"for" { System.out.print(" for") ; 
-                      return symbol(sym.FOR);}
+"while" { System.out.print(" while") ; 
+                      return symbol(sym.while);}
 "float" { System.out.print(yytext()); 
                       return symbol(sym.FLOA, new Integer(yytext()));}
 "bool" { System.out.print("bool"); 
